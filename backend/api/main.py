@@ -107,7 +107,6 @@ async def startup_db_connections():
 
 @app.on_event("shutdown")
 async def shutdown_db_connections():
-    global neo4j_conn
     if neo4j_conn:
         neo4j_conn.close()
 
