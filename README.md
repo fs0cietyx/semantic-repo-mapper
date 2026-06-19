@@ -276,10 +276,62 @@ gantt
 
 ---
 
-## 12. How AI Assistants Should Help
+## 12. Quick Start / Installation Guide
+
+Anyone can run this project locally on their machine. Follow these steps to get your own retro Codebase Visualizer up and running!
+
+### Prerequisites
+Make sure you have the following installed:
+- [Docker](https://www.docker.com/) & Docker Compose (for running the database services: Neo4j, Redis, PostgreSQL)
+- [Node.js](https://nodejs.org/) (v20+)
+- [Python](https://www.python.org/) (v3.11+)
+
+### Option 1: Full Docker Setup (Recommended)
+The easiest way to spin up the required databases (Neo4j, Postgres, Redis, Qdrant) is using the included `docker-compose.yml`.
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/fs0cietyx/semantic-repo-mapper.git
+cd semantic-repo-mapper
+
+# 2. Spin up the background services (databases & message brokers)
+docker-compose up -d
+
+# 3. Start the Backend API (FastAPI)
+cd backend
+python -m venv venv
+source venv/bin/activate  # (On Windows use: venv\Scripts\activate)
+pip install -r requirements.txt
+uvicorn api.main:app --host 0.0.0.1 --port 8000 --reload
+
+# 4. Start the Celery Worker (In a new terminal window)
+cd backend
+source venv/bin/activate
+celery -A workers.celery_app worker --loglevel=info
+
+# 5. Start the Frontend (Next.js) (In a new terminal window)
+cd frontend
+npm install
+npm run dev
+```
+
+Open your browser to [http://localhost:3000](http://localhost:3000) and you are ready to visualize!
+
+### Option 2: Running without Docker
+If you prefer not to use Docker, you will need to manually install and start the following services on their default ports:
+- **PostgreSQL**: `localhost:5432`
+- **Neo4j**: `localhost:7687`
+- **Redis**: `localhost:6379`
+- **Qdrant**: `localhost:6333`
+
+Then proceed with Steps 3, 4, and 5 from Option 1.
+
+---
+
+## 13. How AI Assistants Should Help
 
 AI assistants working on this repository must strictly adhere to these rules:
-1. **Reference ADRs First:** Before modifying databases, parsers, or UI libraries, verify parameters in [decisions.md](file:///Users/mainakbiswas/Documents/AI_Vault/codebase-architecture-visualizer/decisions.md).
+1. **Reference ADRs First:** Before modifying databases, parsers, or UI libraries, verify parameters in [decisions.md](decisions.md).
 2. **Deterministic-First:** Never substitute Tree-sitter parsing with LLM heuristics. Structural resolution must be 100% correct and deterministic.
 3. **Minimize Context:** Ensure any LLM ingestion helpers utilize the hierarchical slicing strategy described in the abstraction layer.
-4. **Maintenance of Logs:** Update [STATUS.md](file:///Users/mainakbiswas/Documents/AI_Vault/codebase-architecture-visualizer/STATUS.md) and log milestones in [progress.md](file:///Users/mainakbiswas/Documents/AI_Vault/codebase-architecture-visualizer/progress.md) for every major engineering task completed.
+4. **Maintenance of Logs:** Update [STATUS.md](STATUS.md) and log milestones in [progress.md](progress.md) for every major engineering task completed.
