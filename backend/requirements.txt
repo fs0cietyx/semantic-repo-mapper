@@ -1,0 +1,27 @@
+fastapi>=0.100.0
+uvicorn[standard]>=0.22.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+python-dotenv>=1.0.0
+
+# Ingestion and Indexing
+GitPython>=3.1.30
+tree-sitter>=0.22.0
+
+# Pre-compiled language grammars (Modern Tree-sitter API)
+tree-sitter-python
+tree-sitter-javascript
+tree-sitter-typescript
+tree-sitter-go
+
+# Databases and Drivers
+psycopg2-binary>=2.9.6
+neo4j>=5.10.0
+redis>=4.6.0
+qdrant-client>=1.3.0
+
+# Async Jobs
+celery>=5.3.1
+
+# AI Integrations
+openai>=1.0.0
